@@ -9,35 +9,47 @@
 // ==/UserScript==
 
 window.addEventListener("load", function () {
+    if (window.location.href === "https://humanbenchmark.com/tests/aim") {
+        let node=document.querySelector('.desktop-only');
+        let observer=new MutationObserver(function(mutationsList){
+            if(mutationsList.length!=0){
+                let element=document.querySelector('[data-aim-target="true"]');
+                if(element){
+                    simulateMouseEvent(element);
+                    // setTimeout(function(){
+                    //     simulateMouseEvent(element);
+                    // },1)
+                    simulateMouseEvent(element);//实际运行过快导致点不到按钮，所以多点击两次🤣🤣🤣
+                }
+            }});
+        observer.observe(node,{childList:true,subtree:true});
+        function simulateMouseEvent(element) {
+            const box = element.getBoundingClientRect();
+            const coordX = box.left + (box.right - box.left) / 2;
+            const coordY = box.top + (box.bottom - box.top) / 2;
+            element.dispatchEvent(new MouseEvent("mousedown", {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+                clientX: coordX,
+                clientY: coordY,
+                button: 0
+            }));
+            element.dispatchEvent(new MouseEvent("mouseup", {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+                clientX: coordX,
+                clientY: coordY,
+                button: 0
+            }));
+        }
 
-  // 选择需要观察变动的节点
-  const getTargetNode = () => document.querySelector(".anim-slide-fade-in");
 
-  // 观察器的配置（需要观察什么变动）
-  const config = { attributes: true, childList: true, subtree: true };
 
-  // 当观察到变动时执行的回调函数
-  const callback = function (mutationsList, observer) {
-    for (let mutation of mutationsList) {
-      if (mutation.type === "childList") {
-        console.log(mutation.targetNode);
-        console.log("A child node has been added or removed.");
-      } else if (mutation.type === "attributes") {
-        console.log("The " + mutation.attributeName + " attribute was modified.");
-      }
     }
-  };
 
-  const targetNode = getTargetNode();
-  if (!targetNode) {
-    console.error("Target node not found!");
-    return; // Exit if the target node doesn't exist
-  }
 
-  // 创建一个观察器实例并传入回调函数
-  const observer = new MutationObserver(callback);
-  // // 以上述配置开始观察目标节点
-  observer.observe(targetNode, config);
 
-  // 之后，可停止观察
+
 });
