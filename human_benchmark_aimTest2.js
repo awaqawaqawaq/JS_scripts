@@ -15,36 +15,39 @@ window.addEventListener("load", function () {
           if(mutationsList.length!=0){
               let element=document.querySelector('[data-aim-target="true"]');
               if(element){
-                  simulateMouseEvent(element);
-                  // setTimeout(function(){
-                  //     simulateMouseEvent(element);
-                  // },1)
-                  simulateMouseEvent(element);//实际运行过快导致点不到按钮，所以多点击两次🤣🤣🤣
-              }
-          }});
-      observer.observe(node,{childList:true,subtree:true});
-      function simulateMouseEvent(element) {
-          const box = element.getBoundingClientRect();
-          const coordX = box.left + (box.right - box.left) / 2;
-          const coordY = box.top + (box.bottom - box.top) / 2;
-          element.dispatchEvent(new MouseEvent("mousedown", {
-              view: window,
-              bubbles: true,
-              cancelable: true,
-              clientX: coordX,
-              clientY: coordY,
-              button: 0
-          }));
-          element.dispatchEvent(new MouseEvent("mouseup", {
-              view: window,
-              bubbles: true,
-              cancelable: true,
-              clientX: coordX,
-              clientY: coordY,
-              button: 0
-          }));
-      }
-
+                simulateMouseEvent(element);
+            }
+            
+        }});
+        observer.observe(node,{childList:true,subtree:true});
+        function simulateMouseEvent(element) {
+            const box = element.getBoundingClientRect();
+            const coordX = box.left + (box.right - box.left) / 2;
+            const coordY = box.top + (box.bottom - box.top) / 2;
+            element.dispatchEvent(new MouseEvent("mousedown", {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+                clientX: coordX,
+                clientY: coordY,
+                button: 0
+            }));
+            element.dispatchEvent(new MouseEvent("mouseup", {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+                clientX: coordX,
+                clientY: coordY,
+                button: 0
+            }));
+        }
+        setInterval(() => {
+            let element = document.querySelector('[data-aim-target="true"]');
+            if (element) {
+                simulateMouseEvent(element);
+            }
+        }, 1); // 每100毫秒检查一次
+        
 
 
   }

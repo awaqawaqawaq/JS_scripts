@@ -5,51 +5,115 @@
 // @grant       none
 // @version     1.0
 // @author      AWAQ
-// @description 2022/12/13 上午11:05:22
+// @description 2024
 // ==/UserScript==
 
 window.addEventListener("load", function () {
-    if (window.location.href === "https://humanbenchmark.com/tests/aim") {
-        let node=document.querySelector('.desktop-only');
-        let observer=new MutationObserver(function(mutationsList){
-            if(mutationsList.length!=0){
-                let element=document.querySelector('[data-aim-target="true"]');
-                if(element){
-                    simulateMouseEvent(element);
-                    // setTimeout(function(){
-                    //     simulateMouseEvent(element);
-                    // },1)
-                    simulateMouseEvent(element);//实际运行过快导致点不到按钮，所以多点击两次🤣🤣🤣
-                }
-            }});
-        observer.observe(node,{childList:true,subtree:true});
-        function simulateMouseEvent(element) {
-            const box = element.getBoundingClientRect();
-            const coordX = box.left + (box.right - box.left) / 2;
-            const coordY = box.top + (box.bottom - box.top) / 2;
-            element.dispatchEvent(new MouseEvent("mousedown", {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-                clientX: coordX,
-                clientY: coordY,
-                button: 0
-            }));
-            element.dispatchEvent(new MouseEvent("mouseup", {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-                clientX: coordX,
-                clientY: coordY,
-                button: 0
-            }));
+  if (window.location.href == "https://humanbenchmark.com/tests/memory") {
+    let startbtn = document.querySelector("button.css-de05nr.e19owgy710");
+    let fullnav = document.querySelector("div.full-nav");
+
+    waitForMemoryBoxes();
+
+    function waitForMemoryBoxes() {
+      if (document.getElementsByClassName(" css-lxtdud eut2yre1").length != 0) {
+        if (!document.getElementById("stopBtn")) {
+          addStopBtn();
         }
 
-
-
+        assignIds();
+      } else {
+        setTimeout(() => {
+          waitForMemoryBoxes();
+        }, 1);
+      }
     }
 
+    function assignIds() {
+      document
+        .getElementsByClassName(" css-lxtdud eut2yre1")
+        .forEach((element, index) => {
+          element.id = "box" + index;
+        });
+      getHighlightedBoxesIds();
+    }
 
+    function getHighlightedBoxesIds() {
+      boxes = new Array();
+      if (
+        document.getElementsByClassName("active css-lxtdud eut2yre1").length !=
+        0
+      ) {
+        document
+          .getElementsByClassName("active css-lxtdud eut2yre1")
+          .forEach((element) => {
+            boxes.push(element.id);
+          });
+        waitForClickingAndClick();
+      } else {
+        setTimeout(() => {
+          getHighlightedBoxesIds();
+        }, 1);
+      }
+    }
 
+    function waitForClickingAndClick() {
+      if (
+        document.getElementsByClassName("active css-lxtdud eut2yre1").length ==
+        0
+      ) {
+        if (stopped == false) {
+          boxes.forEach((element) => {
+            var simulateMouseEvent = function (
+              element,
+              eventName,
+              coordX,
+              coordY
+            ) {
+              element.dispatchEvent(
+                new MouseEvent(eventName, {
+                  view: window,
+                  bubbles: true,
+                  cancelable: true,
+                  clientX: coordX,
+                  clientY: coordY,
+                  button: 0,
+                })
+              );
+            };
 
+            var theButton = document.getElementById(element);
+
+            var box = theButton.getBoundingClientRect(),
+              coordX = box.left + (box.right - box.left) / 2,
+              coordY = box.top + (box.bottom - box.top) / 2;
+            simulateMouseEvent(theButton, "mousedown", coordX, coordY);
+            simulateMouseEvent(theButton, "mouseup", coordX, coordY);
+          });
+          waitForLevel(
+            document.getElementsByClassName("css-dd6wi1")[0].children[1]
+              .innerText
+          );
+        }
+      } else {
+        setTimeout(() => {
+          waitForClickingAndClick();
+        }, 1);
+      }
+    }
+
+    function waitForLevel(oldLvl) {
+      level =
+        document.getElementsByClassName("css-dd6wi1")[0].children[1].innerText;
+      if (level != oldLvl) {
+        if (stopped == false) {
+          waitForMemoryBoxes();
+        }
+      } else {
+        setTimeout(() => {
+          waitForLevel(level);
+        }, 1);
+      }
+    }
+  }
 });
