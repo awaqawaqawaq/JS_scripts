@@ -13,31 +13,26 @@
 // 如果是input框，使用execCommand() 或者 直接修改 value
 // 如果单纯触发键盘事件，可以使用 KeyboardEvent
 window.addEventListener("load", function () {
-    
-    if(window.location.href=="https://humanbenchmark.com/tests/typing"){
-        function similateKeyPress(character,element) {
-            let keydownEvent = new KeyboardEvent('keydown', {
-                key: character,
-                bubbles: true,
-                cancelable: true,
-            })
-            let keyupEvent = new KeyboardEvent('keyup', {
-                key: character,
-                bubbles: true,
-                cancelable: true,
-            })
-            element.dispatchEvent(keydownEvent);
-            element.dispatchEvent(keyupEvent);
-        }
-        
-        let spans=document.querySelectorAll('[tabindex="1"] span');
-        // let spansText=Array.from(spans).map(element=>element.innerText);
-        // spansText.forEach((text,index)=>{
-        //     similateKeyPress(text,spans[index]);
-        // })
-        spans.forEach((span,index)=>{
-            span.classList.toggle('right');
-        })
+  if (window.location.href == "https://humanbenchmark.com/tests/typing") {
+    function similateKeyPress(character, element) {
+      let keydownEvent = new KeyboardEvent("keydown", {
+        key: character,
+        bubbles: true,
+        cancelable: true,
+      });
+      let keyupEvent = new KeyboardEvent("keyup", {
+        key: character,
+        bubbles: true,
+        cancelable: true,
+      });
+      element.dispatchEvent(keydownEvent);
+      element.dispatchEvent(keyupEvent);
     }
 
-})
+    let spans = document.querySelectorAll('[tabindex="1"] span');
+    let spansText = Array.from(spans).map((element) => element.innerText);
+    spansText.forEach((text, index) => {
+      similateKeyPress(text, spans[index]);
+    });
+  }
+});

@@ -48,15 +48,11 @@ window.addEventListener("load", function () {
         let keydownEvent = new KeyboardEvent("keydown", {
           key: character,
           char: character,
-          keyCode: character.charCodeAt(0),
-          which: character.charCodeAt(0),
           bubbles: true,
         });
         let keyupEvent = new KeyboardEvent("keyup", {
           key: character,
           char: character,
-          keyCode: character.charCodeAt(0),
-          which: character.charCodeAt(0),
           bubbles: true,
         });
         element.dispatchEvent(keydownEvent);

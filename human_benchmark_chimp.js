@@ -5,7 +5,7 @@
 // @grant       none
 // @version     1.0
 // @author      AWAQ
-// @description 2022/12/13 上午11:05:22
+// @description 2024
 // ==/UserScript==
 
 window.addEventListener("load", function () {

@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        human_bench_mark_cheats
+// @name        Human Benchmark Cheats
 // @namespace   Violentmonkey Scripts
 // @match       https://humanbenchmark.com/*
 // @grant       none
@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 window.addEventListener("load", function () {
-  if (window.location.href === "https://humanbenchmark.com/tests/sequence") {
+  if (window.location.href == "https://humanbenchmark.com/tests/memory") {
     let simulateMouseEvent = (element) => {
       element.dispatchEvent(
         new MouseEvent("mousedown", {
@@ -31,31 +31,25 @@ window.addEventListener("load", function () {
       mutationList.forEach((mutation) => {
         if (mutation.type === "attributes") {
           let element = mutation.target;
-          let num = parseInt(
-            document.querySelectorAll(".css-dd6wi1 span")[1].innerText
-          );
           if (element.classList.contains("active")) {
-            console.log(num);
             elementArray.push(element);
             console.log(element);
-            if (elementArray.length == num) {
-              setTimeout(() => {
-                elementArray.forEach((element) => {
-                  simulateMouseEvent(element);
-                });
-                elementArray = []; //注意异步编程，不能写在外面
-              }, 2000);
-            }
+            setTimeout(() => {
+              simulateMouseEvent(element);
+            }, 2000);
           }
         }
       });
     });
 
-    const config = { attributes: true, childList: true, subtree: true };
-    let startBtn = document.querySelector(".css-de05nr.e19owgy710");
-    simulateMouseEvent(startBtn);
     let elementArray = [];
-    let elementNode = document.querySelector(".squares");
+    const config = { attributes: true, childList: true, subtree: true };
+    let elementNode = document.querySelector(
+      ".memory-test.css-aix2he.e19owgy77"
+    );
+    let startBtn = document.querySelector(".css-de05nr.e19owgy710");
+
     observer.observe(elementNode, config);
+    simulateMouseEvent(startBtn);
   }
 });
