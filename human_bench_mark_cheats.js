@@ -89,7 +89,7 @@ window.addEventListener("load", function () {
             console.log(num);
             elementArray.push(element);
             console.log(element);
-            if (num === 25) {
+            if (num === 31) {
               observer.disconnect();
             }
             if (elementArray.length == num) {
@@ -266,7 +266,7 @@ window.addEventListener("load", function () {
       cnt++;
 
       // 限制循环次数或添加延迟以避免阻塞
-      if (cnt < 10000) {
+      if (cnt < 5000) {
         setTimeout(handleWord, 10); // 每秒执行一次
       }
     }
